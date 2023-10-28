@@ -28,7 +28,12 @@ class TestDBStorageDocs(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up for the doc tests"""
+        DBStorage.reload()
         cls.dbs_f = inspect.getmembers(DBStorage, inspect.isfunction)
+    
+    @classemethod
+    def tearDown(cls):
+        DBStorage.close()
 
     def test_pep8_conformance_db_storage(self):
         """Test that models/engine/db_storage.py conforms to PEP8."""
@@ -66,7 +71,40 @@ test_db_storage.py'])
                              "{:s} method needs a docstring".format(func[0]))
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
-
+    
+    def test_count_all_objects(self):
+        """testing testing all objects in sdb torage"""
+        count = DBStorage.count()
+        self.assertIsInstance(count, int)
+        self.assertTrue(count >= 0)
+    
+    def test_count_nonexistent_class(self):
+        """counting objcet that do not exist"""
+        class_name = "Non_existentClass"
+        count = DBStorage.count(class_name)
+        self.assertEqual(count, 0)
+    
+    def test_get_existing_object(self):
+        """test retrieving object"""
+        state = DBStorage.all(State).values()[0]
+        state_id = state.id
+        state_obj = DBStorage.get(State, state_id)
+        self.assertIsNotNone(state_obj)
+        self.assertIsInstance(state_obj, State)
+    
+    def test_get_non_existent_object(self):
+        """non existent object testing"""
+        non_exist = "non_exists"
+        state_obj = DBStorage.get(state, non_exist)
+        self.assertIsNone(state_obj)
+    
+    def test_get_non_existent_class(self):
+        """testing non existent class"""
+        non_exist_cls = "non_exist_cls"
+        state = DBStorage.all(State).values()[0]
+        state_id = state.id
+        state_obj = DBStorage.get(non_exist_cls, state_id)
+        self.assertIsNone(state_obj)
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
