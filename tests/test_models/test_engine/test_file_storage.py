@@ -120,33 +120,33 @@ class TestFileStorage(unittest.TestCase):
         Test the get method for an existing object.
         """
         state = State(name="California")
-        storage.new(state)
+        FileStorage.new(FileStorage, state)
         state_id = state.id
-        retrieved_state = storage.get(State, state_id)
+        retrieved_state = FileStorage.get(FileStorage, State, state_id)
         self.assertEqual(retrieved_state, state)
 
     def test_get_nonexistent_object(self):
         """
         Test the get method for a non-existing object.
         """
-        non_existent_state = storage.get(State, "non_existent_id")
+        non_existent_state = FileStorage.get(FileStorage, State, "non_existent_id")
         self.assertIsNone(non_existent_state)
 
-    def test_count_all_objects(self):
-        """
-        Test counting all objects in storage.
-        """
-        initial_state_count = storage.count(State)
-        state1 = State(name="California")
-        storage.new(state1)
-        state2 = State(name="New York")
-        storage.new(state2)
-        updated_state_count = storage.count(State)
-        self.assertEqual(initial_state_count + 2, updated_state_count)
+def test_count_all_objects(self):
+    """
+    Test counting all objects in storage.
+    """
+    initial_state_count = FileStorage.count(State)
+    state1 = State(name="California")
+    FileStorage.new(state1)
+    state2 = State(name="New York")
+    FileStorage.new(state2)
+    updated_state_count = FileStorage.count(State)
+    self.assertEqual(initial_state_count + 2, updated_state_count)
 
-    def test_count_nonexistent_class(self):
-        """
-        Test counting objects for a non-existing class.
-        """
-        non_existent_class_count = storage.count("NonExistentClass")
-        self.assertEqual(non_existent_class_count, 0) 
+def test_count_nonexistent_class(self):
+    """
+    Test counting objects for a non-existing class.
+    """
+    non_existent_class_count = FileStorage.count("NonExistentClass")
+    self.assertEqual(non_existent_class_count, 0)
