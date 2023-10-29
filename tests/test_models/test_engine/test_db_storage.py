@@ -1,9 +1,7 @@
-#!/usr/bin/python3
 """
 Contains the TestDBStorageDocs and TestDBStorage classes
 """
 
-from datetime import datetime
 import inspect
 import models
 from models.engine import db_storage
@@ -18,10 +16,10 @@ import json
 import os
 import pep8
 import unittest
+
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
            "Review": Review, "State": State, "User": User}
-
 
 class TestDBStorageDocs(unittest.TestCase):
     """Tests to check the documentation and style of DBStorage class"""
@@ -67,22 +65,47 @@ test_db_storage.py'])
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
 
-
-class TestFileStorage(unittest.TestCase):
-    """Test the FileStorage class"""
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_all_returns_dict(self):
-        """Test that all returns a dictionaty"""
-        self.assertIs(type(models.storage.all()), dict)
+class TestDBStorage(unittest.TestCase):
+    """Test the DBStorage class"""
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_all_no_class(self):
-        """Test that all returns all rows when no class is passed"""
+    def test_count_all_objects(self):
+        """testing testing all objects in storage"""
+        count = DBStorage.count()
+        self.assertIsInstance(count, int)
+        self.assertTrue(count >= 0)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_new(self):
-        """test that new adds an object to the database"""
+    def test_count_nonexistent_class(self):
+        """counting objects that do not exist"""
+        class_name = "Non_existentClass"
+        count = DBStorage.count(class_name)
+        self.assertEqual(count, 0)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_save(self):
-        """Test that save properly saves objects to file.json"""
+    def test_get_existing_object(self):
+        """test retrieving object"""
+        state = DBStorage.all(State).values()[0]
+        state_id = state.id
+        state_obj = DBStorage.get(State, state_id)
+        self.assertIsNotNone(state_obj)
+        self.assertIsInstance(state_obj, State)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_non_existent_object(self):
+        """non-existent object testing"""
+        non_exist = "non_exists"
+        state_obj = DBStorage.get(State, non_exist)
+        self.assertIsNone(state_obj)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_non_existent_class(self):
+        """testing non-existent class"""
+        non_exist_cls = "non_exist_cls"
+        state = DBStorage.all(State).values()[0]
+        state_id = state.id
+        state_obj = DBStorage.get(non_exist_cls, state_id)
+        self.assertIsNone(state_obj)
+
+if __name__ == '__main__':
+    unittest.main()
