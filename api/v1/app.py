@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 from flask import Flask
-"""from models import storage"""
 from api.v1.views import app_views
 import os
 from models import storage
@@ -14,6 +13,16 @@ app.register_blueprint(app_views)
 @app.teardown_appcontext
 def teardown_appcontext(exception):
     storage.close()
+
+
+@app.errorhandler(404)
+def errorhandler404(exception):
+    """handling 404 error"""
+    data = {
+            "error": "Not found"
+            }
+    response = jsonify(data)
+    response.status_code = 404
 
 
 if __name__ == "__main__":
