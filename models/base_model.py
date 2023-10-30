@@ -10,6 +10,9 @@ import sqlalchemy
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+"""from models.base_model import BaseModel"""
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
