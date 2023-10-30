@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 from flask import Flask
-from models import storage
+"""from models import storage"""
 from api.v1.views import app_views
 import os
+from models import storage
 
 
 app = Flask(__name__)
