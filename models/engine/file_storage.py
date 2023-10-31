@@ -54,7 +54,7 @@ class FileStorage:
             with open(self.__file_path, 'r') as f:
                 jo = json.load(f)
             for key in jo:
-                self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
+               self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
         except:
             pass
 
@@ -73,9 +73,10 @@ class FileStorage:
         """retrieve an object based on class and ID"""
         key = "{}.{}".format(cls.__name__, id)
         return self.__objects.get(key, None)
-    
+
     def count(self, cls=None):
         """count the obj number in storage matching the class"""
         if cls:
-            return len([obj for obj in self.__objects.values() if isinstance(obj, cls)])
+            return len([obj for obj in self.__objects.values()
+                        if isinstance(obj, cls)])
         return len(self.__objects)
