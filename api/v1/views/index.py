@@ -1,26 +1,33 @@
 #!/usr/bin/python3
-"""index in views """
+"""This module defines API routes for status and statistics."""
 
 from flask import jsonify
 from api.v1.views import app_views
 from models import storage
 
-
 @app_views.route("/status", methods=['GET'], strict_slashes=False)
 def status():
-    """status route"""
+    """
+    Status route that returns an 'OK' status message.
+
+    Returns:
+        JSON response with a 200 status code and a 'status' message.
+    """
     data = {
         "status": "OK"
     }
     response = jsonify(data)
     response.status_code = 200
-
     return response
-
 
 @app_views.route("/stats", methods=['GET'], strict_slashes=False)
 def stats():
-    """stats route"""
+    """
+    Stats route that returns statistics about the data models.
+
+    Returns:
+        JSON response with a 200 status code and counts of various data models.
+    """
     data = {
         "amenities": storage.count("Amenity"),
         "cities": storage.count("City"),
@@ -29,8 +36,4 @@ def stats():
         "states": storage.count("State"),
         "users": storage.count("User"),
     }
-
-    """response = jsonify(data)
-    response.status_code = 200"""
-
-    return jsonify(response)
+    return jsonify(data)
