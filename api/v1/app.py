@@ -14,7 +14,7 @@ Environment Variables:
 
 from flask import Flask, jsonify
 from api.v1.views import app_views
-from os import getenv
+import os
 from models import storage
 
 app = Flask(__name__)
@@ -36,12 +36,9 @@ def errorhandler404(exception):
     Returns:
         JSON response with a 404 status code and an error message.
     """
-    data = {
-        "error": "Not found"
-    }
-    response = jsonify(data)
-    response.status_code = 404
-    return response
+    return jsonify(error='Not found'), 404
 
 if __name__ == "__main__":
-    app.run(getenv("HBNB_API_HOST"), getenv("HBNB_API_PORT"), threaded=True)
+    host = os.getenv('HBNB_API_HOST', '0.0.0.0')
+    port = int(os.getenv('HBNB_API_PORT', '5000'))
+    app.run(host=host, port=port, threaded=True)
