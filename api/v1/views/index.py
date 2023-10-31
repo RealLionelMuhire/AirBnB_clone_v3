@@ -11,6 +11,7 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
+
 @app_views.route("/status", methods=['GET'], strict_slashes=False)
 def status():
     """
@@ -25,6 +26,7 @@ def status():
     response = jsonify(data)
     response.status_code = 200
     return response
+
 
 @app_views.route("/stats", methods=['GET'], strict_slashes=False)
 def stats():

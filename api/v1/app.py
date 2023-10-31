@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """
-This script creates a Flask web application and defines routes and error handling.
+script to creates Flask web application and defines routes error
 
-It registers the app_views blueprint for API routes, handles teardown operations, and includes a custom 404 error handler.
+It registers API routes, handles teardown, includes 404 error handler.
 
 Usage:
     Run this script to start the Flask web application.
@@ -21,12 +21,14 @@ app = Flask(__name__)
 
 app.register_blueprint(app_views)
 
+
 @app.teardown_appcontext
 def teardown_appcontext(exception):
     """
     Close the storage session after each request.
     """
     storage.close()
+
 
 @app.errorhandler(404)
 def errorhandler404(exception):
@@ -37,6 +39,7 @@ def errorhandler404(exception):
         JSON response with a 404 status code and an error message.
     """
     return jsonify(error='Not found'), 404
+
 
 if __name__ == "__main__":
     host = os.getenv('HBNB_API_HOST', '0.0.0.0')
